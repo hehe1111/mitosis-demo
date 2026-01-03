@@ -32,3 +32,5 @@ cd test-apps/svelte && npm run dev # 未测试过，不一定能启动
 ## 配置
 
 修改根目录下的 `mitosis.config.cjs` 可添加更多输出目标。
+
+[官方文档 - Configuration](https://mitosis.builder.io/docs/configuration/)
