@@ -25,25 +25,19 @@ function handleOk() {
     <div style="margin-bottom: 20px">
       <h2>Button Types</h2>
       <div style="display: flex; gap: 10px; margin-bottom: 10px">
-        <Button type="primary" @click="console.log('primary clicked')">Primary</Button>
-        <Button @click="console.log('default clicked')">Default</Button>
-        <Button type="danger" @click="console.log('danger clicked')">Danger</Button>
-        <Button type="warning" @click="console.log('warning clicked')">Warning</Button>
+        <Button type="primary" :onClick="() => console.log('primary clicked')">Primary</Button>
+        <Button type="default" :onClick="() => console.log('default clicked')">Default</Button>
+        <Button type="danger" :onClick="() => console.log('danger clicked')">Danger</Button>
+        <Button type="warning" :onClick="() => console.log('warning clicked')">Warning</Button>
       </div>
     </div>
 
     <div>
       <h2>Modal Component</h2>
-      <Button @click="openModal">Open Modal</Button>
+      <Button :onClick="openModal">Open Modal</Button>
 
-      <Modal
-        v-model:visible="modalVisible"
-        title="Example Modal"
-        cancelText="Cancel"
-        okText="Confirm"
-        @cancel="handleCancel"
-        @ok="handleOk"
-      >
+      <Modal :visible="modalVisible" :closable="true" title="Example Modal" cancelText="Cancel" okText="Confirm"
+        :onCancel="handleCancel" :onOk="handleOk">
         <p>This is the modal content.</p>
         <p>You can put any content here.</p>
       </Modal>

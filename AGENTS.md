@@ -56,6 +56,8 @@
 </Show>
 ```
 
+原因参考 https://deepwiki.com/search/mitosis-show_35dbca4a-bee0-42e8-98eb-c8095f2efd0d?mode=fast
+
 ### 2. CSS 对象中不支持展开运算符
 
 **错误示例：**
@@ -81,7 +83,111 @@ const baseStyles = { padding: '4px 15px', borderRadius: '2px' };
 
 ## Vue 编译限制
 
-### 3. Vue 不支持一个文件导出多个可复用组件
+### 3. Vue 不支持 `{value || <JSX>}` 模式
+
+在 Mitosis 源码中使用 `{props.value || (<JSX>)}` 模式时，编译到 Vue 会生成无效的模板语法。
+
+**错误示例：**
+
+```tsx
+<div>
+  {props.footer || (
+    <div>
+      <Button>确定</Button>
+    </div>
+  )}
+</div>
+```
+
+**编译后的 Vue 代码（错误）：**
+
+```vue
+<div>
+  {{footer ||
+  <div>
+    <Button>确定</Button>
+  </div>
+  }}
+</div>
+```
+
+这会导致 Vue 编译错误：`Error parsing JavaScript expression: Unexpected token`
+
+**解决方案：**
+使用两个独立的 `Show` 组件替代 `||` 运算符：
+
+```tsx
+{/* 自定义内容 */}
+<Show when={props.footer !== null && props.footer !== undefined}>
+  <div>{props.footer}</div>
+</Show>
+
+{/* 默认内容 */}
+<Show when={props.footer === undefined}>
+  <div>
+    <Button>确定</Button>
+  </div>
+</Show>
+```
+
+### 4. Vue 中 `props.children` 不能在函数内使用
+
+在 Mitosis 源码中，如果 `props.children` 在函数内部使用，编译到 Vue 时会生成 `useSlots().default`，但不会自动添加 `useSlots` 的 import 语句，导致运行时错误。
+
+**错误示例：**
+
+```tsx
+function renderContent() {
+  if (props.destroyOnClose && !state.localVisible) {
+    return null;
+  }
+  return props.children;  // 在函数内使用 props.children
+}
+
+return (
+  <div>{renderContent()}</div>
+);
+```
+
+**编译后的 Vue 代码（错误）：**
+
+```vue
+<script setup>
+import { ref, watch } from "vue";
+// 缺少: import { useSlots } from "vue";
+
+function renderContent() {
+  // ...
+  return useSlots().default;  // useSlots 未定义！
+}
+</script>
+
+<template>
+  <div>{{ renderContent() }}</div>
+</template>
+```
+
+这会导致运行时错误：`Uncaught ReferenceError: useSlots is not defined`
+
+**解决方案：**
+直接在模板中使用 `props.children`，不要通过函数返回：
+
+```tsx
+// 正确：直接使用 props.children
+return (
+  <div>{props.children}</div>
+);
+```
+
+编译后会正确生成 Vue 的 `<slot />` 语法：
+
+```vue
+<template>
+  <div><slot /></div>
+</template>
+```
+
+### 5. Vue 不支持一个文件导出多个可复用组件
 
 Mitosis 编译 Vue 时，`export function` 定义的函数不会注册为可复用组件。
 

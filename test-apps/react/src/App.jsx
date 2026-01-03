@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, DefaultButton, DangerButton, WarningButton, Modal } from '@mitosis-demo/library-react';
+import { Button, Modal } from '@mitosis-demo/library-react';
 
 function App() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -12,9 +12,9 @@ function App() {
         <h2>Button Types</h2>
         <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
           <Button onClick={() => console.log('primary clicked')}>Primary</Button>
-          <DefaultButton onClick={() => console.log('default clicked')}>Default</DefaultButton>
-          <DangerButton onClick={() => console.log('danger clicked')}>Danger</DangerButton>
-          <WarningButton onClick={() => console.log('warning clicked')}>Warning</WarningButton>
+          <Button type="default" onClick={() => console.log('default clicked')}>Default</Button>
+          <Button type="danger" onClick={() => console.log('danger clicked')}>Danger</Button>
+          <Button type="warning" onClick={() => console.log('warning clicked')}>Warning</Button>
         </div>
       </div>
 

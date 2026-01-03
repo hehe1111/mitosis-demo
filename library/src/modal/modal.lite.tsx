@@ -43,13 +43,6 @@ export default function Modal(props: ModalProps) {
     }
   }
 
-  function renderContent() {
-    if (props.destroyOnClose && !state.localVisible) {
-      return null;
-    }
-    return props.children;
-  }
-
   return (
     <Show when={state.localVisible}>
       <div
@@ -115,6 +108,7 @@ export default function Modal(props: ModalProps) {
             </Show>
           </div>
 
+          {/* 内容区域 - 直接使用 props.children 避免 useSlots 问题 */}
           <div
             css={{
               padding: '24px',
@@ -122,10 +116,11 @@ export default function Modal(props: ModalProps) {
               flex: 1,
             }}
           >
-            {renderContent()}
+            {props.children}
           </div>
 
-          <Show when={props.footer !== null}>
+          {/* 自定义 footer */}
+          <Show when={props.footer !== null && props.footer !== undefined}>
             <div
               css={{
                 padding: '16px 24px',
@@ -136,16 +131,28 @@ export default function Modal(props: ModalProps) {
                 flexShrink: 0,
               }}
             >
-              {props.footer || (
-                <div>
-                  <Button type="default" onClick={handleClose}>
-                    {props.cancelText || '取消'}
-                  </Button>
-                  <Button onClick={handleOk}>
-                    {props.okText || '确定'}
-                  </Button>
-                </div>
-              )}
+              {props.footer}
+            </div>
+          </Show>
+
+          {/* 默认 footer */}
+          <Show when={props.footer === undefined}>
+            <div
+              css={{
+                padding: '16px 24px',
+                borderTop: '1px solid #f0f0f0',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '8px',
+                flexShrink: 0,
+              }}
+            >
+              <Button type="default" onClick={handleClose}>
+                {props.cancelText || '取消'}
+              </Button>
+              <Button onClick={handleOk}>
+                {props.okText || '确定'}
+              </Button>
             </div>
           </Show>
         </div>

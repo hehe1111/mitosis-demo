@@ -10,17 +10,19 @@
             }}</span>
           </template>
         </div>
-        <div class="div-5">{{ renderContent() }}</div>
-        <template v-if="footer !== null">
-          <div class="div-6">
-            {{footer ||
-            <div>
-              <Button type="default" onClick="{handleClose}">
-                {cancelText || '取消'}
-              </Button>
-              <Button onClick="{handleOk}"> {okText || '确定'} </Button>
-            </div>
-            }}
+        <div class="div-5"><slot /></div>
+        <template v-if="footer !== null && footer !== undefined">
+          <div class="div-6">{{ footer }}</div>
+        </template>
+
+        <template v-if="footer === undefined">
+          <div class="div-7">
+            <Button type="default" :onClick="(event) => handleClose()">{{
+              cancelText || "取消"
+            }}</Button
+            ><Button :onClick="(event) => handleOk()">{{
+              okText || "确定"
+            }}</Button>
           </div>
         </template>
       </div>
@@ -73,12 +75,6 @@ function handleMaskClick() {
     handleClose();
   }
 }
-function renderContent() {
-  if (props.destroyOnClose && !localVisible.value) {
-    return null;
-  }
-  return useSlots().default;
-}
 </script>
 
 <style scoped>
@@ -124,6 +120,13 @@ function renderContent() {
   overflow: auto;
 }
 .div-6 {
+  padding: 16px 24px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.div-7 {
   padding: 16px 24px;
   border-top: 1px solid #f0f0f0;
   display: flex;
