@@ -1,5 +1,11 @@
 # Mitosis 使用方法
 
+![](./docs/how%20to%20use%20mitosis.png)
+
+结果：
+
+![](./docs/comparison.png)
+
 ## 开发流程
 
 **1. 启动 Mitosis 开发模式（监听并编译）**
