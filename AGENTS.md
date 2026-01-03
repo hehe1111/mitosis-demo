@@ -1,5 +1,13 @@
 # Mitosis 开发指南
 
+- [BuilderIO / mitosis](https://github.com/BuilderIO/mitosis)
+- [Quickstart](https://mitosis.builder.io/docs/quickstart/)
+- [Configuration](https://mitosis.builder.io/docs/configuration/)
+
+![](./docs/how%20to%20use%20mitosis.png)
+
+![](./docs/comparison.png)
+
 ## 项目结构与构建流程
 
 ### 重要：代码修改规则
@@ -25,6 +33,25 @@
 - `library/packages/qwik/` - 编译生成的 Qwik 组件（自动生成，勿直接修改）
 
 **注意：** 如果直接修改 `library/packages/` 下的代码，下次执行 build 命令时更改会被覆盖！
+
+## 开发流程
+
+**1. 启动 Mitosis 开发模式（监听并编译）**
+
+```bash
+cd library
+npm run start
+```
+
+**2. 运行测试应用（预览效果）**
+
+```bash
+# 根据你想测试的框架选择
+cd test-apps/react && npm run dev
+cd test-apps/vue && npm run dev
+cd test-apps/qwik && npm run dev # 未测试过，不一定能启动
+cd test-apps/svelte && npm run dev # 未测试过，不一定能启动
+```
 
 ## CSS 样式限制
 
@@ -119,7 +146,69 @@ SyntaxError: JSON5: invalid character 'p' at 1:1
 >
 ```
 
-**注意：** 这意味着 Mitosis 组件的样式无法复用，每个元素的样式必须完整内联。
+**注意：** 这意味着使用 `css` prop 时，样式无法复用，每个元素的样式必须完整内联。
+
+### 4. 推荐使用 `useStyle` Hook 分离样式
+
+如果希望将样式与 JSX 分离，推荐使用 `useStyle` Hook。
+
+**三种样式方案对比：**
+
+| 方式            | 样式与 JSX 分离 | 编译成功 | 样式内嵌到组件 |   推荐   |
+| --------------- | :-------------: | :------: | :------------: | :------: |
+| `css` prop      |       ❌        |    ✅    |       ✅       | 简单场景 |
+| 外部 CSS 文件   |       ✅        |    ✅    |   ❌ 不复制到 packages/**    |    ❌    |
+| `useStyle` Hook |       ✅        |    ✅    |       ✅       | ✅ 推荐  |
+
+**`useStyle` Hook 示例：**
+
+```tsx
+import { Show, useStyle } from '@builder.io/mitosis'
+
+export default function Button(props: ButtonProps) {
+  useStyle(`
+    .button-primary {
+      padding: 4px 15px;
+      background-color: #1890ff;
+      color: #fff;
+      border: none;
+    }
+    .button-default {
+      padding: 4px 15px;
+      background-color: #fff;
+      color: rgba(0, 0, 0, 0.85);
+      border: 1px solid #d9d9d9;
+    }
+  `)
+
+  return (
+    <>
+      <Show when={props.type === 'primary' || !props.type}>
+        <button class="button-primary" onClick={props.onClick}>
+          {props.children}
+        </button>
+      </Show>
+      <Show when={props.type === 'default'}>
+        <button class="button-default" onClick={props.onClick}>
+          {props.children}
+        </button>
+      </Show>
+    </>
+  )
+}
+```
+
+**编译结果：**
+
+- **React**: 生成 `<style>{...}</style>` 标签
+- **Vue**: 生成 `<style scoped>...</style>` 块
+
+**优势：**
+
+1. 样式集中定义，便于维护
+2. 使用标准 CSS 语法（非 camelCase）
+3. 编译后样式正确内嵌到各框架组件中
+4. Vue 自动添加 `scoped` 属性，避免样式冲突
 
 ## Vue 编译限制
 
@@ -272,6 +361,19 @@ export function WarningButton(props) { ... }
 
 ## 最佳实践
 
-1. **按钮组件**：在一个文件中定义所有按钮样式变体，导出统一的 `Button` 组件支持 `type` prop
-2. **Modal 内部**：始终使用 `Button type="default"` 而非 `DefaultButton` 组件
-3. **样式组织**：每个按钮类型的样式完整内联，避免使用展开运算符
+1. **样式方案**：优先使用 `useStyle` Hook 分离样式，便于维护和复用
+2. **按钮组件**：在一个文件中定义所有按钮样式变体，导出统一的 `Button` 组件支持 `type` prop
+3. **Modal 内部**：始终使用 `Button type="default"` 而非 `DefaultButton` 组件
+4. **样式组织**：使用 `useStyle` 集中定义样式，或在 `css` prop 中完整内联（避免展开运算符）
+5. **条件渲染**：使用 `Show` 组件而非三元表达式或 `||` 运算符
+
+## 机制与参考
+
+- [如何实现写一次代码，可以编译成不同框架代码](https://deepwiki.com/search/react-vue-svelte-qwik_a5dcd413-f9dd-460d-a741-4a7d0ef4cf55)
+- [样式最佳实践 - DeepWiki](https://deepwiki.com/search/-xxxlitetsx-mitosis_a5f3059f-ab70-44a8-a9f0-b3a0951f06e1?mode=fast)
+- [官方样式示例](https://github.com/BuilderIO/mitosis/blob/993fd9e53243ed9de5ccb19ba2d4653efbd1d9d2/examples/basic/src/blocks/image.lite.tsx#L27)
+
+## 注意事项
+
+- 编译出来的 React 代码，默认使用 CSS Module（可通过配置修改）
+- 修改根目录下的 `mitosis.config.cjs` 可添加更多输出目标
