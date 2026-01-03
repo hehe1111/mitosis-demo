@@ -1,4 +1,4 @@
-import { Show } from '@builder.io/mitosis';
+import { Show, useStyle } from '@builder.io/mitosis';
 
 export type ButtonProps = {
   type?: 'primary' | 'default' | 'danger' | 'warning';
@@ -7,88 +7,83 @@ export type ButtonProps = {
 };
 
 export default function Button(props: ButtonProps) {
+  useStyle(`
+    .button-primary {
+      padding: 4px 15px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      transition: all 0.2s;
+      background-color: #1890ff;
+      color: #fff;
+      border: none;
+    }
+    .button-default {
+      padding: 4px 15px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      transition: all 0.2s;
+      background-color: #fff;
+      color: rgba(0, 0, 0, 0.85);
+      border: 1px solid #d9d9d9;
+    }
+    .button-danger {
+      padding: 4px 15px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      transition: all 0.2s;
+      background-color: #ff4d4f;
+      color: #fff;
+      border: none;
+    }
+    .button-warning {
+      padding: 4px 15px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      transition: all 0.2s;
+      background-color: #faad14;
+      color: #fff;
+      border: none;
+    }
+  `);
+
   return (
     <>
       {/* Primary 类型（默认） */}
       <Show when={props.type === 'primary' || !props.type}>
-        <button
-          onClick={props.onClick}
-          css={{
-            padding: '4px 15px',
-            borderRadius: '2px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            height: '32px',
-            lineHeight: '32px',
-            transition: 'all 0.2s',
-            backgroundColor: '#1890ff',
-            color: '#fff',
-            border: 'none',
-          }}
-        >
+        <button class="button-primary" onClick={props.onClick}>
           {props.children}
         </button>
       </Show>
 
       {/* Default 类型 */}
       <Show when={props.type === 'default'}>
-        <button
-          onClick={props.onClick}
-          css={{
-            padding: '4px 15px',
-            borderRadius: '2px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            height: '32px',
-            lineHeight: '32px',
-            transition: 'all 0.2s',
-            backgroundColor: '#fff',
-            color: 'rgba(0,0,0,0.85)',
-            border: '1px solid #d9d9d9',
-          }}
-        >
+        <button class="button-default" onClick={props.onClick}>
           {props.children}
         </button>
       </Show>
 
       {/* Danger 类型 */}
       <Show when={props.type === 'danger'}>
-        <button
-          onClick={props.onClick}
-          css={{
-            padding: '4px 15px',
-            borderRadius: '2px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            height: '32px',
-            lineHeight: '32px',
-            transition: 'all 0.2s',
-            backgroundColor: '#ff4d4f',
-            color: '#fff',
-            border: 'none',
-          }}
-        >
+        <button class="button-danger" onClick={props.onClick}>
           {props.children}
         </button>
       </Show>
 
       {/* Warning 类型 */}
       <Show when={props.type === 'warning'}>
-        <button
-          onClick={props.onClick}
-          css={{
-            padding: '4px 15px',
-            borderRadius: '2px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            height: '32px',
-            lineHeight: '32px',
-            transition: 'all 0.2s',
-            backgroundColor: '#faad14',
-            color: '#fff',
-            border: 'none',
-          }}
-        >
+        <button class="button-warning" onClick={props.onClick}>
           {props.children}
         </button>
       </Show>

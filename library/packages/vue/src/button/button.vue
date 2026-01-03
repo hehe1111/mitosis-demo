@@ -1,22 +1,24 @@
 <template>
   <template v-if="type === 'primary' || !type">
-    <button class="button" @click="async (event) => onClick()"><slot /></button>
+    <button class="button-primary" @click="async (event) => onClick()">
+      <slot />
+    </button>
   </template>
 
   <template v-if="type === 'default'">
-    <button class="button-2" @click="async (event) => onClick()">
+    <button class="button-default" @click="async (event) => onClick()">
       <slot />
     </button>
   </template>
 
   <template v-if="type === 'danger'">
-    <button class="button-3" @click="async (event) => onClick()">
+    <button class="button-danger" @click="async (event) => onClick()">
       <slot />
     </button>
   </template>
 
   <template v-if="type === 'warning'">
-    <button class="button-4" @click="async (event) => onClick()">
+    <button class="button-warning" @click="async (event) => onClick()">
       <slot />
     </button>
   </template>
@@ -33,7 +35,7 @@ const props = defineProps<ButtonProps>();
 </script>
 
 <style scoped>
-.button {
+.button-primary {
   padding: 4px 15px;
   border-radius: 2px;
   cursor: pointer;
@@ -45,7 +47,7 @@ const props = defineProps<ButtonProps>();
   color: #fff;
   border: none;
 }
-.button-2 {
+.button-default {
   padding: 4px 15px;
   border-radius: 2px;
   cursor: pointer;
@@ -57,7 +59,7 @@ const props = defineProps<ButtonProps>();
   color: rgba(0, 0, 0, 0.85);
   border: 1px solid #d9d9d9;
 }
-.button-3 {
+.button-danger {
   padding: 4px 15px;
   border-radius: 2px;
   cursor: pointer;
@@ -69,7 +71,7 @@ const props = defineProps<ButtonProps>();
   color: #fff;
   border: none;
 }
-.button-4 {
+.button-warning {
   padding: 4px 15px;
   border-radius: 2px;
   cursor: pointer;
