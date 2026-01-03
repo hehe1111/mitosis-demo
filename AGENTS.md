@@ -81,6 +81,46 @@ const baseStyles = { padding: '4px 15px', borderRadius: '2px' };
 >
 ```
 
+### 3. CSS 对象不支持从外部文件导入
+
+Mitosis 需要在编译时静态解析 CSS，因此 `css` prop 必须是内联的对象字面量，不能引用外部变量或导入的对象。
+
+**错误示例：**
+
+```tsx
+// button.styles.ts
+export const primaryStyles = {
+  backgroundColor: '#1890ff',
+  color: '#fff',
+};
+
+// button.lite.tsx
+import { primaryStyles } from './button.styles';
+
+<button css={primaryStyles}>  // ❌ 编译报错
+```
+
+**编译错误：**
+
+```
+Could not parse CSS object primaryStyles
+SyntaxError: JSON5: invalid character 'p' at 1:1
+```
+
+**解决方案：**
+必须在 `css` prop 中直接写对象字面量：
+
+```tsx
+<button
+  css={{
+    backgroundColor: '#1890ff',
+    color: '#fff',
+  }}
+>
+```
+
+**注意：** 这意味着 Mitosis 组件的样式无法复用，每个元素的样式必须完整内联。
+
 ## Vue 编译限制
 
 ### 3. Vue 不支持 `{value || <JSX>}` 模式
@@ -117,13 +157,17 @@ const baseStyles = { padding: '4px 15px', borderRadius: '2px' };
 使用两个独立的 `Show` 组件替代 `||` 运算符：
 
 ```tsx
-{/* 自定义内容 */}
-<Show when={props.footer !== null && props.footer !== undefined}>
+{
+  /* 自定义内容 */
+}
+;<Show when={props.footer !== null && props.footer !== undefined}>
   <div>{props.footer}</div>
 </Show>
 
-{/* 默认内容 */}
-<Show when={props.footer === undefined}>
+{
+  /* 默认内容 */
+}
+;<Show when={props.footer === undefined}>
   <div>
     <Button>确定</Button>
   </div>
@@ -139,26 +183,24 @@ const baseStyles = { padding: '4px 15px', borderRadius: '2px' };
 ```tsx
 function renderContent() {
   if (props.destroyOnClose && !state.localVisible) {
-    return null;
+    return null
   }
-  return props.children;  // 在函数内使用 props.children
+  return props.children // 在函数内使用 props.children
 }
 
-return (
-  <div>{renderContent()}</div>
-);
+return <div>{renderContent()}</div>
 ```
 
 **编译后的 Vue 代码（错误）：**
 
 ```vue
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 // 缺少: import { useSlots } from "vue";
 
 function renderContent() {
   // ...
-  return useSlots().default;  // useSlots 未定义！
+  return useSlots().default // useSlots 未定义！
 }
 </script>
 
@@ -174,9 +216,7 @@ function renderContent() {
 
 ```tsx
 // 正确：直接使用 props.children
-return (
-  <div>{props.children}</div>
-);
+return <div>{props.children}</div>
 ```
 
 编译后会正确生成 Vue 的 `<slot />` 语法：
