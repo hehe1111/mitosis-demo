@@ -108,7 +108,35 @@ const baseStyles = { padding: '4px 15px', borderRadius: '2px' };
 >
 ```
 
-### 3. CSS 对象不支持从外部文件导入
+### 3. CSS 值必须使用字符串类型
+
+Mitosis 的 `css` prop 中，所有值都必须是字符串类型。数字类型（如 `0`、`1000`）不会生效。
+
+**错误示例：**
+
+```tsx
+<div
+  css={{
+    top: 0,        // ❌ 数字类型，不生效
+    left: 0,       // ❌ 数字类型，不生效
+    zIndex: 1000,  // ❌ 数字类型，不生效
+  }}
+>
+```
+
+**正确示例：**
+
+```tsx
+<div
+  css={{
+    top: '0',       // ✅ 字符串
+    left: '0px',    // ✅ 字符串（带单位也可以）
+    zIndex: '1000', // ✅ 字符串
+  }}
+>
+```
+
+### 4. CSS 对象不支持从外部文件导入
 
 Mitosis 需要在编译时静态解析 CSS，因此 `css` prop 必须是内联的对象字面量，不能引用外部变量或导入的对象。
 
@@ -148,7 +176,7 @@ SyntaxError: JSON5: invalid character 'p' at 1:1
 
 **注意：** 这意味着使用 `css` prop 时，样式无法复用，每个元素的样式必须完整内联。
 
-### 4. 推荐使用 `useStyle` Hook 分离样式
+### 5. 推荐使用 `useStyle` Hook 分离样式
 
 如果希望将样式与 JSX 分离，推荐使用 `useStyle` Hook。
 

@@ -47,13 +47,16 @@ export default function Modal(props: ModalProps) {
     <Show when={state.localVisible}>
       <div
         css={{
-          position: 'fixed',
-          inset: 0,
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
           backgroundColor: 'rgba(0,0,0,0.45)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000,
+          zIndex: '1000',
         }}
         onClick={handleMaskClick}
       >
@@ -77,14 +80,14 @@ export default function Modal(props: ModalProps) {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              flexShrink: 0,
+              flexShrink: '0',
             }}
           >
             <div
               css={{
-                margin: 0,
+                margin: '0',
                 fontSize: '16px',
-                fontWeight: 500,
+                fontWeight: '500',
                 color: 'rgba(0,0,0,0.85)',
               }}
             >
@@ -113,7 +116,7 @@ export default function Modal(props: ModalProps) {
             css={{
               padding: '24px',
               overflow: 'auto',
-              flex: 1,
+              flex: '1',
             }}
           >
             {props.children}
@@ -128,7 +131,7 @@ export default function Modal(props: ModalProps) {
                 display: 'flex',
                 justifyContent: 'flex-end',
                 gap: '8px',
-                flexShrink: 0,
+                flexShrink: '0',
               }}
             >
               {props.footer}
@@ -144,7 +147,7 @@ export default function Modal(props: ModalProps) {
                 display: 'flex',
                 justifyContent: 'flex-end',
                 gap: '8px',
-                flexShrink: 0,
+                flexShrink: '0',
               }}
             >
               <Button type="default" onClick={handleClose}>

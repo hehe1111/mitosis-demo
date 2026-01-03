@@ -79,11 +79,16 @@ function handleMaskClick() {
 
 <style scoped>
 .div {
-  position: fixed;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 }
 .div-2 {
   width: 520px;
@@ -101,9 +106,12 @@ function handleMaskClick() {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 .div-4 {
+  margin: 0;
   font-size: 16px;
+  font-weight: 500;
   color: rgba(0, 0, 0, 0.85);
 }
 .span {
@@ -118,6 +126,7 @@ function handleMaskClick() {
 .div-5 {
   padding: 24px;
   overflow: auto;
+  flex: 1;
 }
 .div-6 {
   padding: 16px 24px;
@@ -125,6 +134,7 @@ function handleMaskClick() {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  flex-shrink: 0;
 }
 .div-7 {
   padding: 16px 24px;
@@ -132,5 +142,6 @@ function handleMaskClick() {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  flex-shrink: 0;
 }
 </style>
