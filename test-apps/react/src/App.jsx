@@ -1,12 +1,18 @@
 import { useState } from 'react';
-import { Button, Modal } from '@mitosis-demo/library-react';
+import { AutoComplete, Todos, Greet, Button, Modal } from '@mitosis-demo/library-react';
+import './App.css';
 
 function App() {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Button Components</h1>
+      <h1>Welcome to React.</h1>
+      <AutoComplete />
+      <Todos />
+      <Greet />
+
+      <h2>Button Components</h2>
 
       <div style={{ marginBottom: '20px' }}>
         <h2>Button Types</h2>

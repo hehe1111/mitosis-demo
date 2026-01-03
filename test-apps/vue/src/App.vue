@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Button, Modal } from '@mitosis-demo/library-vue';
+import { AutoComplete, Todos, Greet, Button, Modal } from '@mitosis-demo/library-vue';
 
 const modalVisible = ref(false);
 
@@ -20,7 +20,12 @@ function handleOk() {
 
 <template>
   <div style="padding: 20px">
-    <h1>Button Components</h1>
+    <h1>Welcome to Vue.</h1>
+    <AutoComplete />
+    <Todos />
+    <Greet />
+
+    <h2>Button Components</h2>
 
     <div style="margin-bottom: 20px">
       <h2>Button Types</h2>
@@ -48,6 +53,5 @@ function handleOk() {
 <style>
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 </style>

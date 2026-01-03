@@ -13,7 +13,6 @@ export default function Greet() {
         placeholder="Your name"
       />
       <div>Hello, {state.name}!</div>
-      <div>3</div>
     </div>
   )
 }

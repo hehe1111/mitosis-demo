@@ -6,7 +6,6 @@
       @change="async (event) => (name = event.target.value)"
     />
     <div>Hello, {{ name }}!</div>
-    <div>3</div>
   </div>
 </template>
 

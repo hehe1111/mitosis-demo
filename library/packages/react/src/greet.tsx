@@ -13,7 +13,6 @@ function Greet(props: any) {
         onChange={(event) => setName(event.target.value)}
       />
       <div>Hello, {name}!</div>
-      <div>3</div>
     </div>
   );
 }
