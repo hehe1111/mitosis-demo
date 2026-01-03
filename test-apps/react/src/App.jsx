@@ -1,4 +1,4 @@
-import { AutoComplete, Todos } from '@mitosis-demo/library-react';
+import { AutoComplete, Todos, Greet } from '@mitosis-demo/library-react';
 
 function App() {
   return (
@@ -6,6 +6,7 @@ function App() {
       <div>Welcome to React.</div>
       <AutoComplete />
       <Todos />
+      <Greet />
     </div>
   );
 }
