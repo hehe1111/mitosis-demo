@@ -16,6 +16,8 @@ module.exports = {
     },
     svelte: {},
     qwik: {},
-    vue: {}
+    vue: {
+      api: 'composition',
+    }
   }
 }

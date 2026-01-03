@@ -38,8 +38,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
 export type Props = {
   getValues?: (input: string) => Promise<any[]>;
@@ -47,64 +47,44 @@ export type Props = {
   transformData?: (item) => string;
 };
 
-export default defineComponent({
-  name: "auto-complete",
+const props = defineProps<Props>();
+const showSuggestions = ref(false);
+const suggestions = ref([]);
+const inputVal = ref("");
 
-  props: ["getValues", "transformData", "renderChild"],
-
-  data() {
-    return { showSuggestions: false, suggestions: [], inputVal: "" };
-  },
-
-  watch: {
-    onUpdateHook0: {
-      handler() {
-        this.fetchVals(this.inputVal).then((newVals) => {
-          if (!newVals?.filter) {
-            console.error("Invalid response from getValues:", newVals);
-            return;
-          }
-          this.suggestions = newVals.filter((data) =>
-            this.transform(data)
-              .toLowerCase()
-              .includes(this.inputVal.toLowerCase())
-          );
-        });
-      },
-      immediate: true,
-    },
-  },
-
-  computed: {
-    onUpdateHook0() {
-      return {
-        0: this.inputVal,
-        1: this.getValues,
-      };
-    },
-  },
-
-  methods: {
-    setInputValue(value: string) {
-      this.inputVal = value;
-    },
-    handleClick(item) {
-      this.setInputValue(this.transform(item));
-      this.showSuggestions = false;
-    },
-    fetchVals(city: string) {
-      if (this.getValues) {
-        return this.getValues(city);
+watch(
+  () => [inputVal.value, props.getValues],
+  () => {
+    fetchVals(inputVal.value).then((newVals) => {
+      if (!newVals?.filter) {
+        console.error("Invalid response from getValues:", newVals);
+        return;
       }
-      return fetch(
-        `http://universities.hipolabs.com/search?name=${city}&country=united+states`
-      ).then((x) => x.json());
-    },
-    transform(x) {
-      return this.transformData ? this.transformData(x) : x.name;
-    },
+      suggestions.value = newVals.filter((data) =>
+        transform(data).toLowerCase().includes(inputVal.value.toLowerCase())
+      );
+    });
   },
-});
+  { immediate: true }
+);
+function setInputValue(value: string) {
+  inputVal.value = value;
+}
+function handleClick(item) {
+  setInputValue(transform(item));
+  showSuggestions.value = false;
+}
+function fetchVals(city: string) {
+  if (props.getValues) {
+    return props.getValues(city);
+  }
+  return fetch(
+    `http://universities.hipolabs.com/search?name=${city}&country=united+states`
+  ).then((x) => x.json());
+}
+function transform(x) {
+  return props.transformData ? props.transformData(x) : x.name;
+}
 </script>
 
 <style scoped>

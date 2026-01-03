@@ -31,28 +31,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 
-export default defineComponent({
-  name: "todo-app",
+const list = ref(["hello", "world"]);
+const newItemName = ref("");
 
-  data() {
-    return { list: ["hello", "world"], newItemName: "" };
-  },
-
-  methods: {
-    addItem() {
-      if (!this.newItemName) {
-        return;
-      }
-      this.list = [...this.list, this.newItemName];
-    },
-    deleteItem(idx: number) {
-      this.list = this.list.filter((x, i) => i !== idx);
-    },
-  },
-});
+function addItem() {
+  if (!newItemName.value) {
+    return;
+  }
+  list.value = [...list.value, newItemName.value];
+}
+function deleteItem(idx: number) {
+  list.value = list.value.filter((x, i) => i !== idx);
+}
 </script>
 
 <style scoped>
