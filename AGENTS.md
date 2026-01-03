@@ -1,10 +1,37 @@
 # Mitosis 开发指南
 
+## 项目结构与构建流程
+
+### 重要：代码修改规则
+
+`library/packages/` 目录下的代码（如 `react/`、`vue/`、`svelte/`、`qwik/`）都是通过 Mitosis 编译自动生成的，**不应该直接修改**。
+
+**正确的工作流程：**
+
+1. 修改 `library/src/` 目录下的 Mitosis 源代码（`.lite.tsx` 文件）
+2. 在 `library/` 目录下执行 build 命令：
+   ```bash
+   cd library
+   npm run build
+   ```
+3. 编译后会自动生成更新的 `library/packages/` 下各框架的代码
+
+**目录说明：**
+
+- `library/src/` - Mitosis 源代码（应该修改这里）
+- `library/packages/react/` - 编译生成的 React 组件（自动生成，勿直接修改）
+- `library/packages/vue/` - 编译生成的 Vue 组件（自动生成，勿直接修改）
+- `library/packages/svelte/` - 编译生成的 Svelte 组件（自动生成，勿直接修改）
+- `library/packages/qwik/` - 编译生成的 Qwik 组件（自动生成，勿直接修改）
+
+**注意：** 如果直接修改 `library/packages/` 下的代码，下次执行 build 命令时更改会被覆盖！
+
 ## CSS 样式限制
 
 ### 1. CSS 对象中不支持三元表达式
 
 **错误示例：**
+
 ```tsx
 <button
   css={{
@@ -23,16 +50,16 @@
     css={{
       backgroundColor: '#1890ff',
       color: '#fff',
-      border: 'none',
+      border: 'none'
     }}
-  >
-  </button>
+  ></button>
 </Show>
 ```
 
 ### 2. CSS 对象中不支持展开运算符
 
 **错误示例：**
+
 ```tsx
 const baseStyles = { padding: '4px 15px', borderRadius: '2px' };
 
@@ -59,6 +86,7 @@ const baseStyles = { padding: '4px 15px', borderRadius: '2px' };
 Mitosis 编译 Vue 时，`export function` 定义的函数不会注册为可复用组件。
 
 **问题示例：**
+
 ```tsx
 // button.lite.tsx
 export function DefaultButton(props) { ... }
@@ -87,6 +115,7 @@ export function WarningButton(props) { ... }
 ```
 
 **使用方式：**
+
 ```tsx
 // Modal 中统一使用 type prop
 <Button type="default" onClick={handleClose}>取消</Button>
