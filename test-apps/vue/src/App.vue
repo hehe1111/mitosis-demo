@@ -4,7 +4,7 @@ import { AutoComplete, Todos, Greet } from '@mitosis-demo/library-vue'
 
 <template>
   <div>
-    <div>Welcome to Vue.</div>
+    <h1>Welcome to Vue.</h1>
     <AutoComplete />
     <Todos />
     <Greet />

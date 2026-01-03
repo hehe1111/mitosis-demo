@@ -3,7 +3,7 @@ import { AutoComplete, Todos, Greet } from '@mitosis-demo/library-react';
 function App() {
   return (
     <div>
-      <div>Welcome to React.</div>
+      <h1>Welcome to React.</h1>
       <AutoComplete />
       <Todos />
       <Greet />
