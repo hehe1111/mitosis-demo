@@ -1,12 +1,11 @@
+// const vue = require('./vue-options.cjs')
 
 /**
  * @type {import('@builder.io/mitosis').MitosisConfig}
  */
 module.exports = {
   "files": "src/**",
-  "targets": [
-    "react"
-  ],
+  "targets": ['vue', 'react'],
   "dest": "packages",
   "commonOptions": {
     "typescript": true
@@ -16,6 +15,7 @@ module.exports = {
       "stylesType": "style-tag"
     },
     "svelte": {},
-    "qwik": {}
+    "qwik": {},
+    vue: {},
   }
 }
