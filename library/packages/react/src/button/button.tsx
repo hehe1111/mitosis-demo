@@ -74,17 +74,17 @@ export function WarningButton(props: ButtonProps) {
 function Button(props: ButtonProps) {
   return (
     <>
-      {props.type === "primary" ? (
+      {props.type === "primary" || !props.type ? (
         <>
           <button
-            className="button-3a5737f8"
+            className="button-3dab89e8"
             onClick={(event) => props.onClick()}
           >
             {props.children}
           </button>
         </>
       ) : null}
-      <style>{`.button-3a5737f8 {
+      <style>{`.button-3dab89e8 {
   padding: 4px 15px;
   border-radius: 2px;
   cursor: pointer;

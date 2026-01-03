@@ -8,7 +8,7 @@ export type ButtonProps = {
 
 export default function Button(props: ButtonProps) {
   return (
-    <Show when={props.type === 'primary'}>
+    <Show when={props.type === 'primary' || !props.type}>
       <button
         onClick={props.onClick}
         css={{

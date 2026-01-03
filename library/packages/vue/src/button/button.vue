@@ -1,5 +1,5 @@
 <template>
-  <template v-if="type === 'primary'">
+  <template v-if="type === 'primary' || !type">
     <button class="button" @click="async (event) => onClick()"><slot /></button>
   </template>
 </template>

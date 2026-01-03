@@ -15,9 +15,9 @@
           <div class="div-6">
             {{footer ||
             <div>
-              <DefaultButton onClick="{handleClose}">
+              <Button type="default" onClick="{handleClose}">
                 {cancelText || '取消'}
-              </DefaultButton>
+              </Button>
               <Button onClick="{handleOk}"> {okText || '确定'} </Button>
             </div>
             }}
@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
-import Button, { DefaultButton } from "../button/button.vue";
+import Button from "../button/button.vue";
 
 export type ModalProps = {
   visible: boolean;

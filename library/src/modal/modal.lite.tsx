@@ -1,5 +1,5 @@
 import { onUpdate, Show, useStore } from '@builder.io/mitosis';
-import Button, { DefaultButton } from '../button/button.lite';
+import Button from '../button/button.lite';
 
 export type ModalProps = {
   visible: boolean;
@@ -138,9 +138,9 @@ export default function Modal(props: ModalProps) {
             >
               {props.footer || (
                 <div>
-                  <DefaultButton onClick={handleClose}>
+                  <Button type="default" onClick={handleClose}>
                     {props.cancelText || '取消'}
-                  </DefaultButton>
+                  </Button>
                   <Button onClick={handleOk}>
                     {props.okText || '确定'}
                   </Button>
