@@ -7,84 +7,44 @@ export type ButtonProps = {
   children: any;
 };
 
-export function DefaultButton(props: ButtonProps) {
-  return (
-    <button
-      onClick={props.onClick}
-      css={{
-        padding: "4px 15px",
-        borderRadius: "2px",
-        cursor: "pointer",
-        fontSize: "14px",
-        height: "32px",
-        lineHeight: "32px",
-        transition: "all 0.2s",
-        backgroundColor: "#fff",
-        color: "rgba(0,0,0,0.85)",
-        border: "1px solid #d9d9d9",
-      }}
-    >
-      {props.children}
-    </button>
-  );
-}
-export function DangerButton(props: ButtonProps) {
-  return (
-    <button
-      onClick={props.onClick}
-      css={{
-        padding: "4px 15px",
-        borderRadius: "2px",
-        cursor: "pointer",
-        fontSize: "14px",
-        height: "32px",
-        lineHeight: "32px",
-        transition: "all 0.2s",
-        backgroundColor: "#ff4d4f",
-        color: "#fff",
-        border: "none",
-      }}
-    >
-      {props.children}
-    </button>
-  );
-}
-export function WarningButton(props: ButtonProps) {
-  return (
-    <button
-      onClick={props.onClick}
-      css={{
-        padding: "4px 15px",
-        borderRadius: "2px",
-        cursor: "pointer",
-        fontSize: "14px",
-        height: "32px",
-        lineHeight: "32px",
-        transition: "all 0.2s",
-        backgroundColor: "#faad14",
-        color: "#fff",
-        border: "none",
-      }}
-    >
-      {props.children}
-    </button>
-  );
-}
-
 function Button(props: ButtonProps) {
   return (
     <>
-      {props.type === "primary" || !props.type ? (
-        <>
+      <>
+        {props.type === "primary" || !props.type ? (
           <button
-            className="button-3dab89e8"
+            className="button-2616d87c"
             onClick={(event) => props.onClick()}
           >
             {props.children}
           </button>
-        </>
-      ) : null}
-      <style>{`.button-3dab89e8 {
+        ) : null}
+        {props.type === "default" ? (
+          <button
+            className="button-2616d87c-2"
+            onClick={(event) => props.onClick()}
+          >
+            {props.children}
+          </button>
+        ) : null}
+        {props.type === "danger" ? (
+          <button
+            className="button-2616d87c-3"
+            onClick={(event) => props.onClick()}
+          >
+            {props.children}
+          </button>
+        ) : null}
+        {props.type === "warning" ? (
+          <button
+            className="button-2616d87c-4"
+            onClick={(event) => props.onClick()}
+          >
+            {props.children}
+          </button>
+        ) : null}
+      </>
+      <style>{`.button-2616d87c {
   padding: 4px 15px;
   border-radius: 2px;
   cursor: pointer;
@@ -93,6 +53,39 @@ function Button(props: ButtonProps) {
   line-height: 32px;
   transition: all 0.2s;
   background-color: #1890ff;
+  color: #fff;
+  border: none;
+}.button-2616d87c-2 {
+  padding: 4px 15px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 32px;
+  line-height: 32px;
+  transition: all 0.2s;
+  background-color: #fff;
+  color: rgba(0,0,0,0.85);
+  border: 1px solid #d9d9d9;
+}.button-2616d87c-3 {
+  padding: 4px 15px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 32px;
+  line-height: 32px;
+  transition: all 0.2s;
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+}.button-2616d87c-4 {
+  padding: 4px 15px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 32px;
+  line-height: 32px;
+  transition: all 0.2s;
+  background-color: #faad14;
   color: #fff;
   border: none;
 }`}</style>
