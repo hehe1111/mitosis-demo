@@ -8,6 +8,7 @@ export type ButtonProps = {
 };
 
 function Button(props: ButtonProps) {
+  props = { type: "default", children: null, ...props };
   return (
     <>
       <>

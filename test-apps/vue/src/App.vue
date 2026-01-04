@@ -31,7 +31,7 @@ function handleOk() {
       <h2>Button Types</h2>
       <div style="display: flex; gap: 10px; margin-bottom: 10px">
         <Button type="primary" :onClick="() => console.log('primary clicked')">Primary</Button>
-        <Button type="default" :onClick="() => console.log('default clicked')">Default</Button>
+        <Button :onClick="() => console.log('default clicked')">Default</Button>
         <Button type="danger" :onClick="() => console.log('danger clicked')">Danger</Button>
         <Button type="warning" :onClick="() => console.log('warning clicked')">Warning</Button>
       </div>

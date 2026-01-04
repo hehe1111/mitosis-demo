@@ -31,7 +31,11 @@ export type ButtonProps = {
   children: any;
 };
 
-const props = defineProps<ButtonProps>();
+const props = withDefaults(defineProps<ButtonProps>(), {
+  type: "default",
+  onClick: undefined,
+  children: null,
+});
 </script>
 
 <style scoped>

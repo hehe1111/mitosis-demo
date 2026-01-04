@@ -17,8 +17,8 @@ function App() {
       <div style={{ marginBottom: '20px' }}>
         <h2>Button Types</h2>
         <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-          <Button onClick={() => console.log('primary clicked')}>Primary</Button>
-          <Button type="default" onClick={() => console.log('default clicked')}>Default</Button>
+          <Button type="primary" onClick={() => console.log('primary clicked')}>Primary</Button>
+          <Button onClick={() => console.log('default clicked')}>Default</Button>
           <Button type="danger" onClick={() => console.log('danger clicked')}>Danger</Button>
           <Button type="warning" onClick={() => console.log('warning clicked')}>Warning</Button>
         </div>

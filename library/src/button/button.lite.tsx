@@ -1,4 +1,4 @@
-import { Show, useStyle } from '@builder.io/mitosis';
+import { Show, useDefaultProps, useStyle } from '@builder.io/mitosis';
 
 export type ButtonProps = {
   type?: 'primary' | 'default' | 'danger' | 'warning';
@@ -7,6 +7,11 @@ export type ButtonProps = {
 };
 
 export default function Button(props: ButtonProps) {
+  useDefaultProps<ButtonProps>({
+    type: 'default',
+    children: null,
+  });
+
   useStyle(`
     .button-primary {
       padding: 8px 16px;
