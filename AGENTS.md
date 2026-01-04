@@ -1,12 +1,31 @@
 # Mitosis 开发指南
 
-- [BuilderIO / mitosis](https://github.com/BuilderIO/mitosis)
+## 什么是 Mitosis？
+
+Mitosis 是一个允许你**编写一次组件，编译到多个框架**的工具。支持输出到 React、Vue、Angular、Svelte、Qwik 等。
+
+官方文档：
+
+- [mitosis](https://mitosis.builder.io/docs/overview/)
 - [Quickstart](https://mitosis.builder.io/docs/quickstart/)
-- [Configuration](https://mitosis.builder.io/docs/configuration/)
+- [Project structure](https://mitosis.builder.io/docs/project-structure/)
 
 ![](./docs/how%20to%20use%20mitosis.png)
 
 ![](./docs/comparison.png)
+
+## 对比 Web Components
+
+- [Challenges with web components](https://mitosis.builder.io/docs/overview/#challenges-with-web-components)
+
+## 与 Figma 集成
+
+- [Integration with Figma](https://mitosis.builder.io/docs/overview/#integration-with-figma)
+
+## 机制
+
+- [How does it work](https://mitosis.builder.io/docs/overview/#how-does-it-work)
+  - [deepwiki](https://deepwiki.com/search/react-vue-svelte-qwik_a5dcd413-f9dd-460d-a741-4a7d0ef4cf55)
 
 ## 项目结构与构建流程
 
@@ -17,10 +36,12 @@
 **正确的工作流程：**
 
 1. 修改 `library/src/` 目录下的 Mitosis 源代码（`.lite.tsx` 文件）
-2. 在 `library/` 目录下执行 build 命令：
+2. 在 `library/` 目录下执行 start / build 命令：
    ```bash
    cd library
-   npm run build
+   npm run start # watch 模式，适合开发时使用
+   # 或
+   npm run build # 一次性编译
    ```
 3. 编译后会自动生成更新的 `library/packages/` 下各框架的代码
 
@@ -32,7 +53,31 @@
 - `library/packages/svelte/` - 编译生成的 Svelte 组件（自动生成，勿直接修改）
 - `library/packages/qwik/` - 编译生成的 Qwik 组件（自动生成，勿直接修改）
 
-**注意：** 如果直接修改 `library/packages/` 下的代码，下次执行 build 命令时更改会被覆盖！
+**注意：** 如果直接修改 `library/packages/` 下的代码，下次执行 start / build 命令时更改会被覆盖！
+
+## 配置
+
+- [Configuration](https://mitosis.builder.io/docs/configuration/)
+
+举例：
+
+在 `library/` 目录下创建 `mitosis.config.cjs`：
+
+```javascript
+// mitosis.config.cjs
+const react = require('./react-options.cjs');
+const vue = require('./vue-options.cjs');
+
+/** @type {import('@builder.io/mitosis').MitosisConfig} */
+module.exports = {
+  files: 'src/**',
+  targets: ['vue', 'react'],
+  options: {
+    react,
+    vue
+  }
+};
+```
 
 ## 开发流程
 
@@ -51,6 +96,159 @@ cd test-apps/react && npm run dev
 cd test-apps/vue && npm run dev
 cd test-apps/qwik && npm run dev # 未测试过，不一定能启动
 cd test-apps/svelte && npm run dev # 未测试过，不一定能启动
+```
+
+## 组件编写
+
+- [Components](https://mitosis.builder.io/docs/components/)
+- [Hooks](https://mitosis.builder.io/docs/hooks/)
+- [Context](https://mitosis.builder.io/docs/context/)
+- [Customization](https://mitosis.builder.io/docs/customizability/)
+- [Using Libraries](https://mitosis.builder.io/docs/using-libraries/)
+
+### 基本组件
+
+```tsx
+export default function MyComponent() {
+  return <div>Hello world!</div>;
+}
+```
+
+### Props 传参
+
+```tsx
+export default function Button(props) {
+  useDefaultProps({
+    text: 'default text',
+    onClick: () => {
+      console.log('hi');
+    },
+  });
+
+  return (
+    <button onClick={(event) => props.onClick(event)}>
+      {props.text}
+    </button>
+  );
+}
+```
+
+### 状态管理
+
+**useState - 单个状态**
+```tsx
+export default function MyComponent() {
+  const [name, setName] = useState('Steve');
+
+  return (
+    <div>
+      <h2>Hello, {name}</h2>
+      <input onInput={(event) => setName(event.target.value)} value={name} />
+    </div>
+  );
+}
+```
+
+**useStore - 对象状态**
+```tsx
+import { useStore } from '@builder.io/mitosis';
+
+export default function MyComponent() {
+  const state = useStore({
+    name: 'Steve',
+  });
+
+  return (
+    <div>
+      <h2>Hello, {state.name}</h2>
+      <input
+        onInput={(event) => {
+          state.name = event.target.value;
+        }}
+        value={state.name}
+      />
+    </div>
+  );
+}
+```
+
+### 事件处理
+
+```tsx
+<button onClick={() => doSomething()}>Click me</button>
+<input onInput={(event) => doSomething(event.target.value)} />
+```
+
+### 控制流
+
+**条件渲染 - Show**
+```tsx
+import { Show } from '@builder.io/mitosis';
+
+export default function MyComponent(props) {
+  return (
+    <Show when={props.showContent} else={<span>Default</span>}>
+      <div>Content shown!</div>
+    </Show>
+  );
+}
+```
+
+**列表渲染 - For**
+```tsx
+import { For } from '@builder.io/mitosis';
+
+export default function MyComponent() {
+  const state = useStore({
+    items: ['apple', 'banana'],
+  });
+
+  return (
+    <ul>
+      <For each={state.items}>{(item) => <li>{item}</li>}</For>
+    </ul>
+  );
+}
+```
+
+### 样式
+
+**内联样式**
+```tsx
+<div css={{ marginTop: '10px', color: 'red' }} />
+```
+
+**组件样式 - useStyle**
+```tsx
+import { useStyle } from '@builder.io/mitosis';
+
+export default function MyComponent() {
+  useStyle(`
+    button {
+      font-size: 12px;
+    }
+  `);
+
+  return <button css={{ background: 'blue' }}>Button</button>;
+}
+```
+
+### Children 插槽
+
+```tsx
+import { useMetadata } from '@builder.io/mitosis';
+
+useMetadata({
+  isAttachedToShadowDom: true, // Web Components 需要
+});
+
+export default function Layout(props) {
+  return (
+    <div className="layout">
+      {props.children}
+    </div>
+  );
+}
 ```
 
 ## CSS 样式限制
@@ -187,6 +385,8 @@ SyntaxError: JSON5: invalid character 'p' at 1:1
 | `css` prop      |       ❌        |    ✅    |       ✅       | 简单场景 |
 | 外部 CSS 文件   |       ✅        |    ✅    |   ❌ 不复制到 packages/**    |    ❌    |
 | `useStyle` Hook |       ✅        |    ✅    |       ✅       | ✅ 推荐  |
+
+外部 CSS 文件无法被复制到产物 packages/ 下，可参考 https://mitosis.builder.io/docs/components/#import-css-file
 
 **`useStyle` Hook 示例：**
 
@@ -389,17 +589,10 @@ export function WarningButton(props) { ... }
 
 ## 最佳实践
 
-1. **样式方案**：优先使用 `useStyle` Hook 分离样式，便于维护和复用
-2. **按钮组件**：在一个文件中定义所有按钮样式变体，导出统一的 `Button` 组件支持 `type` prop
-3. **Modal 内部**：始终使用 `Button type="default"` 而非 `DefaultButton` 组件
-4. **样式组织**：使用 `useStyle` 集中定义样式，或在 `css` prop 中完整内联（避免展开运算符）
-5. **条件渲染**：使用 `Show` 组件而非三元表达式或 `||` 运算符
-
-## 机制与参考
-
-- [如何实现写一次代码，可以编译成不同框架代码](https://deepwiki.com/search/react-vue-svelte-qwik_a5dcd413-f9dd-460d-a741-4a7d0ef4cf55)
-- [样式最佳实践 - DeepWiki](https://deepwiki.com/search/-xxxlitetsx-mitosis_a5f3059f-ab70-44a8-a9f0-b3a0951f06e1?mode=fast)
-- [官方样式示例](https://github.com/BuilderIO/mitosis/blob/993fd9e53243ed9de5ccb19ba2d4653efbd1d9d2/examples/basic/src/blocks/image.lite.tsx#L27)
+1. **样式方案**：优先使用 `useStyle` Hook 分离样式，便于维护和复用。或在 `css` prop 中完整内联（避免展开运算符）
+   - [样式最佳实践 - DeepWiki](https://deepwiki.com/search/-xxxlitetsx-mitosis_a5f3059f-ab70-44a8-a9f0-b3a0951f06e1?mode=fast)
+   - [官方样式示例](https://github.com/BuilderIO/mitosis/blob/993fd9e53243ed9de5ccb19ba2d4653efbd1d9d2/examples/basic/src/blocks/image.lite.tsx#L27)
+2. **条件渲染**：使用 `Show` 组件而非三元表达式或 `||` 运算符
 
 ## 注意事项
 
